@@ -2,7 +2,9 @@
 
 #include "ofMain.h"
 #include "TCollection.h"
+//declaraties van classes en functies
 
+//Hoofd class
 class GLOW : public ofBaseApp{
 	public:
 		class PixelGrid;
@@ -20,47 +22,54 @@ class GLOW : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		PixelGrid *PG;
-		ofEasyCam cam;
-		ofMesh mesh;
-		vector<Creature> Creatures;
-		int creatureCount;
+
+		PixelGrid *PG;	//Pixelgrid, soort array maar dan in object vorm
+		ofEasyCam cam;	//3D camera
+		ofMesh mesh;	//3D omgeving
+		vector<Creature> Creatures;		//verzameling beestjes
+		int creatureCount;	//aantal beestjes
+
+		//bepalen waar het grid getekend word
 		int CanvasOffsetX;
 		int CanvasOffsetY;
+
+		//richtingen waar het beestje naar toe kan
 		int AttractTo;//1 up	2 right		3 down		4 left;
 };
 class GLOW::PixelGrid{
 public:
 	PixelGrid(int RowCount,int ColumnCount);
-	void CreateGrid();
-	class PixelRow;	
-	TCollection<PixelRow> PixelrowColection;
-	int RowCount;
-	int ColumnCount;
+	void CreateGrid(); //functie die het grid vult
+	class PixelRow;	//declaratie van 1 pixelrij
+	TCollection<PixelRow> PixelrowColection; //declaratie rij collectie
+	int RowCount; //aantal rijen in het grid
+	int ColumnCount; // aantal kolommen in het grid
 };
 
 class GLOW::PixelGrid::PixelRow{
 	public:
 	int rowNR;
-	class PixelColumn;
-	TCollection<PixelColumn> PixelColumnColection;
+	class PixelColumn; //declaratie van 1 pixelkolom
+	TCollection<PixelColumn> PixelColumnColection; //declaratie kolom collectie
 
 };
 class GLOW::PixelGrid::PixelRow::PixelColumn{
 	public:
 	int ColumnNR;
-	bool CreatureSpot;
-	ofVec3f Vertex;
+	bool CreatureSpot;	//geeft aan of er een beestje op deze locatie staat
+	ofVec3f Vertex;	//3d coordinaat voor het 3Dgrid
 };
 
+
+//beestje
 class GLOW::Creature{
 	public:
-		int ID;
-		int x;
-		int y;
+		int ID;	//uniek ID van het Beestje
+		int x;	//x positie op het grid
+		int y;	//y positie op het grid
 		int direction; //1 up	2 right		3 down		4 left;
-		void MoveCreature(GLOW::PixelGrid* PG,int AttractTo);
-		void InitCreature(GLOW::PixelGrid* PG);
-		int speed;
+		void MoveCreature(GLOW::PixelGrid* PG,int AttractTo);	//functie om beestje te verplaatsen (60 x per seconde)
+		void InitCreature(GLOW::PixelGrid* PG);		//initialisatie van het beestje, bepaald de beginwaardes
+		int speed; // snelheid van het beestje
 		
 };

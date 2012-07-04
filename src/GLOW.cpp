@@ -7,7 +7,7 @@ GLOW::PixelGrid::PixelGrid(int PGRowCount,int PGColumnCount){
 }
 
 void GLOW::setup(){
-	creatureCount=20;
+	creatureCount=50;
 	CanvasOffsetY=-600;
 	CanvasOffsetX=0;
 	AttractTo=2;
@@ -15,7 +15,7 @@ void GLOW::setup(){
 	ofSetVerticalSync(true);
 	glEnable(GL_DEPTH_TEST);
 	ofSetLineWidth(10);
-	PG = new PixelGrid(8,80);
+	PG = new PixelGrid(20,180);
 	PG->CreateGrid();
 	Creatures.resize(creatureCount);
 
@@ -49,9 +49,9 @@ void GLOW::PixelGrid::CreateGrid(){
 }
 void GLOW::Creature::InitCreature(GLOW::PixelGrid* PG){
 	direction=2;
-	speed=(int)ofRandom(1,8);
-	x=(int)ofRandom(1,79);
-	y=(int)ofRandom(1,8);
+	speed=(int)ofRandom(3,8);
+	x=(int)ofRandom(1,179);
+	y=(int)ofRandom(1,19);
 
 }
 void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
