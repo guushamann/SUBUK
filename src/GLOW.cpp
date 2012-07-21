@@ -49,10 +49,30 @@ void GLOW::PixelGrid::CreateGrid(){
 }
 void GLOW::Creature::InitCreature(GLOW::PixelGrid* PG){
 	direction=2;
-	speed=(int)ofRandom(3,8);
+	speed=(int)ofRandom(1,8);
 	x=(int)ofRandom(1,179);
 	y=(int)ofRandom(1,19);
+	Kleur=ofColor(255,255,255);
 
+}
+void GLOW::Creature::FindCreatures(GLOW::PixelGrid* PG,vector<Creature> & Creatures){
+	this->Kleur=ofColor(255,255,255);
+	this->NearCreatures.clear();
+	for(int i=0;i<Creatures.size();i++){	
+		if(ofDistSquared(this->x,this->y,Creatures[i].x,Creatures[i].y)<3 && ofDistSquared(this->x,this->y,Creatures[i].x,Creatures[i].y)>-3){
+			this->NearCreatures.push_back(i);			
+		}
+	}
+	if(this->NearCreatures.size()>1){
+		this->Kleur=ofColor::green;
+	}
+	if(this->NearCreatures.size()>2){
+		this->Kleur=ofColor::yellow;
+	}
+	if(this->NearCreatures.size()>3){
+		this->Kleur=ofColor(255,0,0);		
+	}
+	
 }
 void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
 	if(1==(int)ofRandom(1,speed)){
@@ -99,6 +119,7 @@ void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
 //--------------------------------------------------------------
 void GLOW::update(){
 	for(int i=0;i<Creatures.size();i++){
+		Creatures[i].FindCreatures(PG,Creatures);
 		Creatures[i].MoveCreature(PG, AttractTo);
 	}
 }
@@ -120,7 +141,7 @@ void GLOW::draw(){
 			if(Creatures[i].x < PG->ColumnCount && Creatures[i].y < PG->RowCount){
 				cur = cam.worldToScreen(PG->PixelrowColection[Creatures[i].y].PixelColumnColection[Creatures[i].x].Vertex);
 			}
-			ofSetColor(ofColor::yellow);
+			ofSetColor(Creatures[i].Kleur);
 			//ofSetLineWidth(2);
 			ofCircle(cur, 2);
 	}

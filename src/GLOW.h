@@ -65,11 +65,13 @@ class GLOW::PixelGrid::PixelRow::PixelColumn{
 class GLOW::Creature{
 	public:
 		int ID;	//uniek ID van het Beestje
-		int x;	//x positie op het grid
-		int y;	//y positie op het grid
+		float x;	//x positie op het grid
+		float y;	//y positie op het grid
 		int direction; //1 up	2 right		3 down		4 left;
 		void MoveCreature(GLOW::PixelGrid* PG,int AttractTo);	//functie om beestje te verplaatsen (60 x per seconde)
+		void FindCreatures(GLOW::PixelGrid* PG,vector<Creature> & Creatures);
 		void InitCreature(GLOW::PixelGrid* PG);		//initialisatie van het beestje, bepaald de beginwaardes
 		int speed; // snelheid van het beestje
-		
+		vector<int> NearCreatures;
+		ofColor Kleur; //kleur van het beestje
 };
