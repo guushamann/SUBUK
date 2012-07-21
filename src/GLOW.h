@@ -63,7 +63,7 @@ class GLOW::PixelGrid::PixelRow::PixelColumn{
 	bool CreatureSpot;	//geeft aan of er een beestje op deze locatie staat
 	ofVec3f Vertex;	//3d coordinaat voor het 3Dgrid
 };
-
+ 
 
 //beestje
 class GLOW::Creature{

@@ -105,7 +105,7 @@ void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
 			direction=4;
 		}
 		if(x <= 0){
-			direction=2;
+			direction=2; 
 		}
 		if(y > PG->RowCount-1){
 			direction=3;
