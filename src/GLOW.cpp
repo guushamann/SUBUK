@@ -11,11 +11,12 @@ void GLOW::setup(){
 	CanvasOffsetY=-600;
 	CanvasOffsetX=0;
 	AttractTo=2;
-
+	GridXcount=180;
+	GridYcount=20;
 	ofSetVerticalSync(true);
 	glEnable(GL_DEPTH_TEST);
 	ofSetLineWidth(10);
-	PG = new PixelGrid(20,180);
+	PG = new PixelGrid(GridYcount,GridXcount);
 	PG->CreateGrid();
 	Creatures.resize(creatureCount);
 
@@ -49,25 +50,35 @@ void GLOW::PixelGrid::CreateGrid(){
 }
 void GLOW::Creature::InitCreature(GLOW::PixelGrid* PG){
 	direction=2;
-	speed=(int)ofRandom(1,8);
-	x=(int)ofRandom(1,179);
-	y=(int)ofRandom(1,19);
+	speed=1;
+	speedCounter=0;
+	x=(int)ofRandom(1,PG->ColumnCount-1);
+	y=(int)ofRandom(1,PG->RowCount-1);
 	Kleur=ofColor(255,255,255);
 
 }
 void GLOW::Creature::FindCreatures(GLOW::PixelGrid* PG,vector<Creature> & Creatures){
 	this->Kleur=ofColor(255,255,255);
+	for (vector<NearCreatureInfo*>::iterator pObj = NearCreatures.begin();pObj != NearCreatures.end(); ++pObj) {
+      delete *pObj;
+	}
 	this->NearCreatures.clear();
+	NearCreatureInfo* Nci = NULL;	
+	float distance ;
 	for(int i=0;i<Creatures.size();i++){	
-		if(ofDistSquared(this->x,this->y,Creatures[i].x,Creatures[i].y)<3 && ofDistSquared(this->x,this->y,Creatures[i].x,Creatures[i].y)>-3){
-			this->NearCreatures.push_back(i);			
+		distance=ofDistSquared(this->x,this->y,Creatures[i].x,Creatures[i].y);
+		if(distance<3 && distance>-3){
+			Nci = new NearCreatureInfo();
+			Nci->ID=Creatures[i].ID;
+			Nci->DistanceToCreature=distance;
+			this->NearCreatures.push_back(Nci);	
 		}
 	}
 	if(this->NearCreatures.size()>1){
 		this->Kleur=ofColor::green;
 	}
 	if(this->NearCreatures.size()>2){
-		this->Kleur=ofColor::yellow;
+	this->Kleur=ofColor::yellow;
 	}
 	if(this->NearCreatures.size()>3){
 		this->Kleur=ofColor(255,0,0);		
@@ -75,7 +86,21 @@ void GLOW::Creature::FindCreatures(GLOW::PixelGrid* PG,vector<Creature> & Creatu
 	
 }
 void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
-	if(1==(int)ofRandom(1,speed)){
+	//increase speed when further from the nest
+	float DeelStrook = PG->ColumnCount/4;
+
+	if(x<DeelStrook){
+		speed=(int)ofMap(x,0,DeelStrook,8,1);
+	}
+	if(x>DeelStrook && x<(DeelStrook*3)){
+		speed=1;
+	}
+	if(x>=(DeelStrook*3)){
+		speed=(int)ofMap(x,DeelStrook*3,PG->ColumnCount,1,8);
+	}
+
+	if(speed==speedCounter){
+		speedCounter=0;
 		if(x > PG->ColumnCount-1){
 			direction=4;
 		}
@@ -115,6 +140,7 @@ void GLOW::Creature::MoveCreature(GLOW::PixelGrid* PG,int AttractTo){
 			//y=1;
 		}
 	}
+	speedCounter++;
 };
 //--------------------------------------------------------------
 void GLOW::update(){

@@ -9,6 +9,7 @@ class GLOW : public ofBaseApp{
 	public:
 		class PixelGrid;
 		class Creature;
+		class NearCreatureInfo;
 		void setup();
 		void update();
 		void draw();
@@ -35,6 +36,9 @@ class GLOW : public ofBaseApp{
 
 		//richtingen waar het beestje naar toe kan
 		int AttractTo;//1 up	2 right		3 down		4 left;
+		int GridXcount;
+		int GridYcount;
+
 };
 class GLOW::PixelGrid{
 public:
@@ -72,6 +76,13 @@ class GLOW::Creature{
 		void FindCreatures(GLOW::PixelGrid* PG,vector<Creature> & Creatures);
 		void InitCreature(GLOW::PixelGrid* PG);		//initialisatie van het beestje, bepaald de beginwaardes
 		int speed; // snelheid van het beestje
-		vector<int> NearCreatures;
+		int speedCounter;
+		vector<GLOW::NearCreatureInfo*> NearCreatures;
 		ofColor Kleur; //kleur van het beestje
+};
+class GLOW::NearCreatureInfo{
+	public:
+	int ID;
+	float DistanceToCreature;
+
 };
